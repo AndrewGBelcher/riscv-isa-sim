@@ -28,6 +28,10 @@ static void help(int exit_code = 1)
   fprintf(stderr, "  -l                    Generate a log of execution\n");
   fprintf(stderr, "  -h, --help            Print this help message\n");
   fprintf(stderr, "  -H                    Start halted, allowing a debugger to connect\n");
+
+  // shadow stack verbose options
+  fprintf(stderr, "  -vss                  Shadow Stack verbose mode\n");
+
   fprintf(stderr, "  --isa=<name>          RISC-V ISA string [default %s]\n", DEFAULT_ISA);
   fprintf(stderr, "  --varch=<name>        RISC-V Vector uArch string [default %s]\n", DEFAULT_VARCH);
   fprintf(stderr, "  --pc=<address>        Override ELF entry point\n");
@@ -59,6 +63,7 @@ static void help(int exit_code = 1)
   fprintf(stderr, "  --dm-no-hasel         Debug module supports hasel\n");
   fprintf(stderr, "  --dm-no-abstract-csr  Debug module won't support abstract to authenticate\n");
   fprintf(stderr, "  --dm-no-halt-groups   Debug module won't support halt groups\n");
+  
 
   exit(exit_code);
 }
@@ -108,6 +113,10 @@ int main(int argc, char** argv)
   bool log = false;
   bool dump_dts = false;
   bool dtb_enabled = true;
+
+  // shadow stack verbose mode
+  bool ss_verbose = false;
+
   size_t nprocs = 1;
   reg_t start_pc = reg_t(-1);
   std::vector<std::pair<reg_t, mem_t*>> mems;
@@ -199,6 +208,10 @@ int main(int argc, char** argv)
   parser.option('m', 0, 1, [&](const char* s){mems = make_mems(s);});
   // I wanted to use --halted, but for some reason that doesn't work.
   parser.option('H', 0, 0, [&](const char* s){halted = true;});
+
+  // parse shadow stack verbose mode
+  parser.option(0, "vss", 0, [&](const char* s){ss_verbose = true;});
+
   parser.option(0, "rbb-port", 1, [&](const char* s){use_rbb = true; rbb_port = atoi(s);});
   parser.option(0, "pc", 1, [&](const char* s){start_pc = strtoull(s, 0, 0);});
   parser.option(0, "hartids", 1, hartids_parser);
@@ -212,6 +225,10 @@ int main(int argc, char** argv)
   parser.option(0, "extension", 1, [&](const char* s){extension = find_extension(s);});
   parser.option(0, "dump-dts", 0, [&](const char *s){dump_dts = true;});
   parser.option(0, "disable-dtb", 0, [&](const char *s){dtb_enabled = false;});
+
+
+
+
   parser.option(0, "extlib", 1, [&](const char *s){
     void *lib = dlopen(s, RTLD_NOW | RTLD_GLOBAL);
     if (lib == NULL) {
@@ -271,6 +288,9 @@ int main(int argc, char** argv)
     if (dc) s.get_core(i)->get_mmu()->register_memtracer(&*dc);
     if (extension) s.get_core(i)->register_extension(extension());
   }
+
+  // set verbose mode internally
+  s.get_core(0)->get_mmu()->get_sstack()->set_verbose_mode(ss_verbose);
 
   s.set_debug(debug);
   s.set_log(log);
