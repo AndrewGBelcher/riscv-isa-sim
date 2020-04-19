@@ -380,6 +380,8 @@ disassembler_t::disassembler_t(int xlen)
   #define DEFINE_FX2TYPE(code) DISASM_INSN(#code, code, 0, {&xrd, &frs1, &frs2})
   #define DEFINE_XFTYPE(code) DISASM_INSN(#code, code, 0, {&frd, &xrs1})
   #define DEFINE_SFENCE_TYPE(code) DISASM_INSN(#code, code, 0, {&xrs1, &xrs2})
+  
+
 
   DEFINE_XLOAD(lb)
   DEFINE_XLOAD(lbu)
@@ -474,6 +476,7 @@ disassembler_t::disassembler_t(int xlen)
   DEFINE_ITYPE_SHIFT(sraiw);
 
   DEFINE_RTYPE(add);
+  DEFINE_RTYPE(mod);
   DEFINE_RTYPE(sub);
   DEFINE_RTYPE(sll);
   DEFINE_RTYPE(slt);
@@ -513,6 +516,12 @@ disassembler_t::disassembler_t(int xlen)
   DEFINE_NOARG(fence);
   DEFINE_NOARG(fence_i);
   DEFINE_SFENCE_TYPE(sfence_vma);
+
+  /* Shadow Stack implementation */
+  DEFINE_NOARG(ssst);
+  DEFINE_NOARG(ssld);
+  DEFINE_NOARG(ssth); 
+  /* end of Shadow Stack implementation */
 
   add_insn(new disasm_insn_t("csrr", match_csrrs, mask_csrrs | mask_rs1, {&xrd, &csr}));
   add_insn(new disasm_insn_t("csrw", match_csrrw, mask_csrrw | mask_rd, {&csr, &xrs1}));

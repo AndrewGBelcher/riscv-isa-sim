@@ -264,6 +264,10 @@
 #define MASK_ANDI  0x707f
 #define MATCH_ADD 0x33
 #define MASK_ADD  0xfe00707f
+
+#define MATCH_MOD 0x20000033                                                    
+#define MASK_MOD 0xfe00707f
+
 #define MATCH_SUB 0x40000033
 #define MASK_SUB  0xfe00707f
 #define MATCH_SLL 0x1033
@@ -1504,6 +1508,16 @@
 #define MASK_VAMOMINUQ_V  0xf800707f
 #define MATCH_VAMOMAXUQ_V 0xe000002f
 #define MASK_VAMOMAXUQ_V  0xf800707f
+
+/* Shadow Stack implementation */
+#define MATCH_SSST 0x2b
+#define MASK_SSST  0xffffffff
+#define MATCH_SSLD 0x57
+#define MASK_SSLD  0xffffffff
+#define MATCH_SSTH 0x7b
+#define MASK_SSTH  0xff
+/* end of Shadow Stack implementation */
+
 #define CSR_FFLAGS 0x1
 #define CSR_FRM 0x2
 #define CSR_FCSR 0x3
@@ -1794,6 +1808,9 @@ DECLARE_INSN(srai, MATCH_SRAI, MASK_SRAI)
 DECLARE_INSN(ori, MATCH_ORI, MASK_ORI)
 DECLARE_INSN(andi, MATCH_ANDI, MASK_ANDI)
 DECLARE_INSN(add, MATCH_ADD, MASK_ADD)
+
+DECLARE_INSN(mod, MATCH_MOD, MASK_MOD)
+
 DECLARE_INSN(sub, MATCH_SUB, MASK_SUB)
 DECLARE_INSN(sll, MATCH_SLL, MASK_SLL)
 DECLARE_INSN(slt, MATCH_SLT, MASK_SLT)
@@ -2414,6 +2431,14 @@ DECLARE_INSN(vamominq_v, MATCH_VAMOMINQ_V, MASK_VAMOMINQ_V)
 DECLARE_INSN(vamomaxq_v, MATCH_VAMOMAXQ_V, MASK_VAMOMAXQ_V)
 DECLARE_INSN(vamominuq_v, MATCH_VAMOMINUQ_V, MASK_VAMOMINUQ_V)
 DECLARE_INSN(vamomaxuq_v, MATCH_VAMOMAXUQ_V, MASK_VAMOMAXUQ_V)
+
+/* Shadow Stack implementation */
+DECLARE_INSN(ssst, MATCH_SSST, MASK_SSST)
+DECLARE_INSN(ssld, MATCH_SSLD, MASK_SSLD)
+DECLARE_INSN(ssth, MATCH_SSTH, MASK_SSTH)
+/* end of Shadow Stack implementation */
+
+
 #endif
 #ifdef DECLARE_CSR
 DECLARE_CSR(fflags, CSR_FFLAGS)

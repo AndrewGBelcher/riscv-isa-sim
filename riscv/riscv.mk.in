@@ -26,6 +26,7 @@ riscv_hdrs = \
 	rocc.h \
 	insn_template.h \
 	debug_module.h \
+	sstack.h \
 	debug_rom_defines.h \
 	remote_bitbang.h \
 	jtag_dtm.h \
@@ -53,6 +54,7 @@ riscv_srcs = \
 	rom.cc \
 	clint.cc \
 	debug_module.cc \
+	sstack.cc \
 	remote_bitbang.cc \
 	jtag_dtm.cc \
 	$(riscv_gen_srcs) \
@@ -116,6 +118,7 @@ riscv_insn_ext_i = \
 	xori \
 	fence \
 	fence_i \
+	mod \
 
 riscv_insn_ext_a = \
 	amoadd_d \
@@ -664,6 +667,10 @@ riscv_insn_priv = \
 	sret \
 	wfi \
 
+riscv_insn_sstack = \
+	ssst \
+	ssld \
+	ssth \
 
 riscv_insn_list = \
 	$(riscv_insn_ext_a) \
@@ -675,6 +682,7 @@ riscv_insn_list = \
 	$(riscv_insn_ext_q) \
 	$(if $(HAVE_INT128),$(riscv_insn_ext_v),) \
 	$(riscv_insn_priv) \
+	$(riscv_insn_sstack) \
 
 riscv_gen_srcs = \
 	$(addsuffix .cc,$(riscv_insn_list))

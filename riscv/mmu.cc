@@ -12,6 +12,7 @@ mmu_t::mmu_t(simif_t* sim, processor_t* proc)
   matched_trigger(NULL)
 {
   flush_tlb();
+  sstack = new sstack_t();
   yield_load_reservation();
 }
 

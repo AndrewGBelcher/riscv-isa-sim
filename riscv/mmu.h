@@ -5,6 +5,7 @@
 
 #include "decode.h"
 #include "trap.h"
+#include "sstack.h"
 #include "common.h"
 #include "config.h"
 #include "simif.h"
@@ -55,6 +56,8 @@ class mmu_t
 public:
   mmu_t(simif_t* sim, processor_t* proc);
   ~mmu_t();
+
+  sstack_t* get_sstack() { return sstack; }
 
   inline reg_t misaligned_load(reg_t addr, size_t size)
   {
@@ -377,6 +380,10 @@ private:
   trigger_matched_t *matched_trigger;
 
   friend class processor_t;
+
+  friend class sstack_t;
+
+  sstack_t *sstack;
 };
 
 struct vm_info {

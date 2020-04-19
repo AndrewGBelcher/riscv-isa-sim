@@ -145,7 +145,11 @@ public:
   }
 private:
   T data[N];
+
 };
+
+
+
 
 // helpful macros, etc
 #define MMU (*p->get_mmu())
@@ -230,6 +234,8 @@ private:
 #define zext32(x) ((reg_t)(uint32_t)(x))
 #define sext_xlen(x) (((sreg_t)(x) << (64-xlen)) >> (64-xlen))
 #define zext_xlen(x) (((reg_t)(x) << (64-xlen)) >> (64-xlen))
+
+
 
 #define set_pc(x) \
   do { p->check_pc_alignment(x); \
