@@ -112,7 +112,7 @@ int sstack_t::authenticate(int ra, int din)
 
 	if(verbose_mode)
 	{
-		printf("auth ra=%lx\n", ra);
+		printf("auth ra=%lx datain=%lx\n", ra, din);
 	}
 
 	return result;
@@ -129,17 +129,17 @@ void sstack_t::select(int selector)
 
 	if(verbose_mode)
 	{
-		printf("ssth 0x%lx\n", selector);
+		printf("ssth %d\n", selector);
 	}
 
-	if(selector >= 0 && selector < SHADOW_STACK_COUNT)
+	if((selector < 0) || (selector >= SHADOW_STACK_COUNT))
 	{
-		stack_selector = selector;
+		SSTACK_ASSERT("selector is not valid!");
 	}
 
 	else
 	{
-		SSTACK_ASSERT("selector is not valid!");
+		stack_selector = selector;
 	}
 }
 
